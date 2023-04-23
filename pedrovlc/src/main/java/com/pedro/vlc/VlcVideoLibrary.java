@@ -23,17 +23,19 @@ import org.videolan.libvlc.MediaPlayer;
 public class VlcVideoLibrary implements MediaPlayer.EventListener {
 
     private int width = 0, height = 0;
+    private int surfaceViewWidth = 0, surfaceViewHeight = 0;
+
     private LibVLC vlcInstance;
     private MediaPlayer player;
     private VlcListener vlcListener;
-    //The library will select one of this class for rendering depend of constructor called
+    // The library will select one of this class for rendering depend of constructor called
     private SurfaceView surfaceView;
     private TextureView textureView;
     private SurfaceTexture surfaceTexture;
     private Surface surface;
     private SurfaceHolder surfaceHolder;
+
     private List<String> options = new ArrayList<>();
-    private int surfaceViewWidth = 0, surfaceViewHeight = 0;
 
     public VlcVideoLibrary(Context context, VlcListener vlcListener, SurfaceView surfaceView, int surfaceViewWidth, int surfaceViewHeight) {
         this.vlcListener = vlcListener;
@@ -66,8 +68,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         options.add(":fullscreen");
     }
 
-    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface,
-                           SurfaceHolder surfaceHolder) {
+    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface, SurfaceHolder surfaceHolder) {
         this.vlcListener = vlcListener;
         this.surface = surface;
         this.surfaceHolder = surfaceHolder;
@@ -75,8 +76,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         options.add(":fullscreen");
     }
 
-    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface, int width,
-                           int height) {
+    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface, int width, int height) {
         this.vlcListener = vlcListener;
         this.surface = surface;
         this.width = width;
@@ -86,8 +86,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         options.add(":fullscreen");
     }
 
-    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface,
-                           SurfaceHolder surfaceHolder, int width, int height) {
+    public VlcVideoLibrary(Context context, VlcListener vlcListener, Surface surface, SurfaceHolder surfaceHolder, int width, int height) {
         this.vlcListener = vlcListener;
         this.surface = surface;
         this.surfaceHolder = surfaceHolder;
@@ -162,8 +161,11 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         } else {
             throw new RuntimeException("You cant set a null render object");
         }
-        if (surfaceViewWidth != 0 && surfaceViewHeight != 0)
+        if (surfaceViewWidth != 0 && surfaceViewHeight != 0) {
             vlcOut.setWindowSize(surfaceViewWidth, surfaceViewHeight);
+        } else if (width != 0 && height != 0) {
+            vlcOut.setWindowSize(width, height);
+        }
         vlcOut.attachViews();
         player.setVideoTrackEnabled(true);
         player.play();
