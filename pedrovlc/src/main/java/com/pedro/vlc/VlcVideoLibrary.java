@@ -130,6 +130,11 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         }
     }
 
+    public void setSurfaceViewSize(int width, int height) {
+        surfaceViewWidth = width;
+        surfaceViewHeight = height;
+    }
+
     private void setMedia(Media media) {
         //delay = network buffer + file buffer
         //media.addOption(":network-caching=" + Constants.BUFFER);
@@ -174,6 +179,9 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
     @Override
     public void onEvent(MediaPlayer.Event event) {
         switch (event.type) {
+            case MediaPlayer.Event.Opening:
+                vlcListener.onOpening();
+                break;
             case MediaPlayer.Event.Playing:
                 vlcListener.onComplete();
                 break;
